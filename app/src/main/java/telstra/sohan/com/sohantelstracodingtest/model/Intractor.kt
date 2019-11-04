@@ -39,7 +39,7 @@ class Intractor(private val mOnGetDatalistener: GetDataCallBack.onGetDataListene
                 }
             })
         }else{
-            mOnGetDatalistener.onFailure("Please check Internet connection")
+            mOnGetDatalistener.onFailure("Please check Internet connection.")
         }
 
     }
