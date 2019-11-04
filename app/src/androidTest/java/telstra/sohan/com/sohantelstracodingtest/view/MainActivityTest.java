@@ -1,4 +1,4 @@
-package telstra.sohan.com.sohantelstracodingtest.View;
+package telstra.sohan.com.sohantelstracodingtest.view;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
