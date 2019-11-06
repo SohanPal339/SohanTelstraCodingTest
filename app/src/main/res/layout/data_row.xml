@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/five_dp"
-    android:layout_marginLeft="@dimen/five_dp"
-    android:layout_marginRight="@dimen/five_dp">
+    android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/ten_dp"
+        android:padding="@dimen/relative_padding"
         android:orientation="vertical">
         <TextView
             android:id="@+id/textTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title"
-            android:textSize="@dimen/twenty_sp"
+            android:textSize="@dimen/text_view_title_size"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
             />
@@ -23,9 +20,8 @@
             android:id="@+id/textDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/five_dp"
-            android:layout_marginRight="@dimen/five_dp"
-            android:textSize="@dimen/sixteen_sp"
+            android:layout_marginTop="@dimen/text_view_description_margin_top"
+            android:textSize="@dimen/text_view_description_size"
             android:layout_toLeftOf="@+id/img"
             android:layout_below="@+id/textTitle"
             android:layout_alignParentLeft="true"
@@ -34,11 +30,11 @@
 
         <ImageView
             android:id="@+id/img"
-            android:layout_width="@dimen/hundred_dp"
-            android:layout_height="@dimen/hundred_dp"
-            android:layout_marginLeft="@dimen/five_dp"
-            android:layout_marginTop="@dimen/five_dp"
-            android:padding="@dimen/five_dp"
+            android:layout_width="@dimen/row_img_width"
+            android:layout_height="@dimen/row_img_height"
+            android:layout_marginLeft="@dimen/row_img_margin_left"
+            android:layout_marginTop="@dimen/row_img_margin_top"
+            android:layout_marginRight="@dimen/row_img_margin_right"
             android:layout_below="@+id/textTitle"
             android:layout_alignParentEnd="true"
             />
