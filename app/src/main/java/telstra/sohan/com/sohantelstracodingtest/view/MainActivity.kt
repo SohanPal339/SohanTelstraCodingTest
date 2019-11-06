@@ -1,6 +1,7 @@
 package telstra.sohan.com.sohantelstracodingtest.view
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -14,6 +15,8 @@ import telstra.sohan.com.sohantelstracodingtest.presenter.Presenter
 
 class MainActivity : AppCompatActivity(), GetDataCallBack.View, SwipeRefreshLayout.OnRefreshListener {
 
+    val LIST_STATE_KEY = "recycler_list_state"
+    private var listState: Parcelable? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var userContentFactsAdapter: UserContentFactsAdapter
@@ -49,6 +52,27 @@ class MainActivity : AppCompatActivity(), GetDataCallBack.View, SwipeRefreshLayo
             loadRecyclerViewData()
         }
 
+    }
+
+    override fun onSaveInstanceState(state: Bundle) {
+        super.onSaveInstanceState(state)
+        // Save list state
+        listState = linearLayoutManager.onSaveInstanceState()
+        state.putParcelable(LIST_STATE_KEY, listState)
+    }
+
+    override fun onRestoreInstanceState(state: Bundle?) {
+        super.onRestoreInstanceState(state)
+        // Retrieve list state and list/item positions
+        if (state != null)
+            listState = state.getParcelable(LIST_STATE_KEY)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (listState != null) {
+            linearLayoutManager.onRestoreInstanceState(listState)
+        }
     }
 
     private fun loadRecyclerViewData() {
