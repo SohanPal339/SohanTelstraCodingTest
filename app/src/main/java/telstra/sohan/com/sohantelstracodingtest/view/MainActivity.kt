@@ -1,11 +1,17 @@
 package telstra.sohan.com.sohantelstracodingtest.view
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.widget.Toast
 import telstra.sohan.com.sohantelstracodingtest.R
 import telstra.sohan.com.sohantelstracodingtest.adapter.UserContentFactsAdapter
@@ -13,8 +19,18 @@ import telstra.sohan.com.sohantelstracodingtest.model.FactsDataDto
 import telstra.sohan.com.sohantelstracodingtest.presenter.GetDataCallBack
 import telstra.sohan.com.sohantelstracodingtest.presenter.Presenter
 
-class MainActivity : AppCompatActivity(), GetDataCallBack.View, SwipeRefreshLayout.OnRefreshListener {
-
+class MainActivity : AppCompatActivity(), GetDataCallBack.View, SwipeRefreshLayout.OnRefreshListener{
+    private var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val notConnected = intent.getBooleanExtra(ConnectivityManager
+                    .EXTRA_NO_CONNECTIVITY, false)
+            if (notConnected) {
+                disconnected()
+            } else {
+                connected()
+            }
+        }
+    }
     val LIST_STATE_KEY = "recycler_list_state"
     private var listState: Parcelable? = null
     private lateinit var recyclerView: RecyclerView
@@ -52,6 +68,15 @@ class MainActivity : AppCompatActivity(), GetDataCallBack.View, SwipeRefreshLayo
             loadRecyclerViewData()
         }
 
+    }
+    override fun onStart() {
+        super.onStart()
+        registerReceiver(broadcastReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(broadcastReceiver)
     }
 
     override fun onSaveInstanceState(state: Bundle) {
@@ -97,6 +122,16 @@ class MainActivity : AppCompatActivity(), GetDataCallBack.View, SwipeRefreshLayo
     }
 
     override fun onRefresh() {
+        loadRecyclerViewData()
+    }
+
+    private fun disconnected() {
+        recyclerView.visibility = View.INVISIBLE
+        Toast.makeText(this@MainActivity, getString(R.string.network_error), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun connected() {
+        recyclerView.visibility = View.VISIBLE
         loadRecyclerViewData()
     }
 }

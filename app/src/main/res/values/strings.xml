@@ -3,5 +3,6 @@
 
     <string name="title">Title</string>
     <string name="description">Description</string>
+    <string name="network_error">Network is not available...</string>
 
 </resources>

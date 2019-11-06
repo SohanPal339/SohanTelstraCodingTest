@@ -16,7 +16,7 @@ import java.util.*
 class Intractor(private val mOnGetDatalistener: GetDataCallBack.onGetDataListener) : GetDataCallBack.Interactor {
     internal var factsDataDto: List<FactsDataDto>? = ArrayList()
     override fun initRetrofitCall(context: Context) {
-        if(Constants.isOnline()){
+
             val gson = GsonBuilder()
                     .setLenient()
                     .create()
@@ -38,9 +38,6 @@ class Intractor(private val mOnGetDatalistener: GetDataCallBack.onGetDataListene
                     mOnGetDatalistener.onFailure(t.message!!)
                 }
             })
-        }else{
-            mOnGetDatalistener.onFailure("Please check Internet connection")
-        }
 
     }
 }
