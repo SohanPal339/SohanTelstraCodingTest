@@ -46,7 +46,7 @@ class FactsFragment : Fragment(), GetDataCallBack.View, SwipeRefreshLayout.OnRef
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        //Inflate the layout for this fragment
+        //Inflate the layout for this fragment.
         val view = inflater?.inflate(R.layout.facts_fragment, container, false)
 
         recyclerView = view.findViewById<RecyclerView>(R.id.recycler) as RecyclerView
