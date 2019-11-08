@@ -8,12 +8,12 @@ import com.squareup.picasso.Picasso
 import telstra.sohan.com.sohantelstracodingtest.R
 
 
-object PicasoClient {
+object PicassoClient {
 
     fun downloadImage(c: Context, url: String?, img: ImageView) {
-        if (url != null && url.isNotEmpty()) {
+        url?. let {
             Picasso.with(c).load(url).placeholder(R.drawable.ic_launcher_background).into(img)
-        } else {
+        } ?: let {
             Picasso.with(c).load(R.drawable.ic_launcher_background).into(img)
         }
     }

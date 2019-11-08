@@ -15,7 +15,7 @@ import telstra.sohan.com.sohantelstracodingtest.R;
 import static junit.framework.Assert.assertNotNull;
 
 /**
- * Created by Sohan Jangid on 21-10-2019.
+ * Created by Sohan Pal on 21-10-2019.
  */
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {

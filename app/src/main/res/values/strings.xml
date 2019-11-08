@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">SohanTelstraCodingTest</string>
 
-    <string name="title">Title</string>
-    <string name="description">Description</string>
+    <string name="title">Murdochs needed counselling after hacking scandle, says magazine</string>
+    <string name="description">NEW YORK: The British phone-hacking scandle brought simmering tensions.</string>
     <string name="network_error">Network is not available...</string>
 
 </resources>

@@ -6,7 +6,7 @@ import telstra.sohan.com.sohantelstracodingtest.model.FactsDataDto
 
 interface GetDataCallBack {
     interface View {
-        fun onGetDataSuccess(listFactsDataDto: List<FactsDataDto>)
+        fun onGetDataSuccess(listFactsDataDto: List<FactsDataDto>, title: String)
         fun onGetDataFailure(message: String)
     }
 
@@ -14,13 +14,12 @@ interface GetDataCallBack {
         fun getCall(context: Context)
     }
 
-    interface Interactor {
+    interface Interact {
         fun initRetrofitCall(context: Context)
-
     }
 
-   interface onGetDataListener {
-        fun onSuccess(listFactsDataDto: List<FactsDataDto>)
+    interface OnGetDataListener {
+        fun onSuccess(listFactsDataDto: List<FactsDataDto>, title: String)
         fun onFailure(message: String)
     }
 }

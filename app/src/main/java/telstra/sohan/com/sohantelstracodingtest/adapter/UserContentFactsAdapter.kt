@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import telstra.sohan.com.sohantelstracodingtest.R
 import telstra.sohan.com.sohantelstracodingtest.model.FactsDataDto
-import telstra.sohan.com.sohantelstracodingtest.utility.PicasoClient
+import telstra.sohan.com.sohantelstracodingtest.utility.PicassoClient
 import java.util.*
 
 
@@ -20,25 +20,27 @@ class UserContentFactsAdapter(private val context: Context, listFactsDataDto: Li
         this.listFactsDataDto = listFactsDataDto as ArrayList<FactsDataDto>
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserContentFactsAdapter.MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.data_row, parent, false)
         return MyViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: UserContentFactsAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        if (listFactsDataDto[position].title != null) {
+        listFactsDataDto[position].title?.let {
             holder.mTextTitle.text = listFactsDataDto[position].title
-        } else {
-            holder.mTextTitle.text = "N/A"
-        }
-        if (listFactsDataDto[position].description != null) {
-            holder.mTextDescription.text = listFactsDataDto[position].description
-        } else {
-            holder.mTextDescription.text = "N/A"
-        }
-        PicasoClient.downloadImage(context, listFactsDataDto[position].imageHref, holder.mImg)
 
+            listFactsDataDto[position].description?.let {
+                holder.mTextDescription.text = listFactsDataDto[position].description
+            } ?: let {
+                holder.mTextDescription.text = "N/A"
+            }
+            PicassoClient.downloadImage(context, listFactsDataDto[position].imageHref, holder.mImg)
+        } ?: let {
+            listFactsDataDto.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, listFactsDataDto.size)
+        }
 
     }
 
@@ -47,14 +49,9 @@ class UserContentFactsAdapter(private val context: Context, listFactsDataDto: Li
     }
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        internal var mTextTitle: TextView
-        internal var mTextDescription: TextView
-        internal var mImg: ImageView
+        var mTextTitle: TextView = view.findViewById<View>(R.id.textTitle) as TextView
+        var mTextDescription: TextView = view.findViewById<View>(R.id.textDescription) as TextView
+        var mImg: ImageView = view.findViewById<View>(R.id.img) as ImageView
 
-        init {
-            mTextTitle = view.findViewById<View>(R.id.textTitle) as TextView
-            mTextDescription = view.findViewById<View>(R.id.textDescription) as TextView
-            mImg = view.findViewById<View>(R.id.img) as ImageView
-        }
     }
 }
