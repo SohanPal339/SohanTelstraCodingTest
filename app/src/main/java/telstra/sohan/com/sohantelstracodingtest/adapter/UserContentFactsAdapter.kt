@@ -9,15 +9,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import telstra.sohan.com.sohantelstracodingtest.R
 import telstra.sohan.com.sohantelstracodingtest.model.FactsDataDto
-import telstra.sohan.com.sohantelstracodingtest.utility.PicassoClient
+import telstra.sohan.com.sohantelstracodingtest.utility.GlideDownloadImage
 import java.util.*
 
 
-class UserContentFactsAdapter(private val context: Context, listFactsDataDto: List<FactsDataDto>) : RecyclerView.Adapter<UserContentFactsAdapter.MyViewHolder>() {
+class UserContentFactsAdapter(context: Context, listFactsDataDto: List<FactsDataDto>) : RecyclerView.Adapter<UserContentFactsAdapter.MyViewHolder>() {
     private var listFactsDataDto = ArrayList<FactsDataDto>()
+    private var context: Context? = null
 
     init {
         this.listFactsDataDto = listFactsDataDto as ArrayList<FactsDataDto>
+        this.context = context
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -30,17 +32,18 @@ class UserContentFactsAdapter(private val context: Context, listFactsDataDto: Li
         listFactsDataDto[position].title?.let {
             holder.mTextTitle.text = listFactsDataDto[position].title
 
-            listFactsDataDto[position].description?.let {
-                holder.mTextDescription.text = listFactsDataDto[position].description
-            } ?: let {
-                holder.mTextDescription.text = "N/A"
-            }
-            PicassoClient.downloadImage(context, listFactsDataDto[position].imageHref, holder.mImg)
         } ?: let {
-            listFactsDataDto.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, listFactsDataDto.size)
+            holder.mTextTitle.text = "N/A"
+
         }
+        listFactsDataDto[position].description?.let {
+            holder.mTextDescription.text = listFactsDataDto[position].description
+        } ?: let {
+            holder.mTextDescription.text = "N/A"
+        }
+
+        context?.let { GlideDownloadImage.downloadImage(it, listFactsDataDto[position].imageHref, holder.mImg) }
+
 
     }
 

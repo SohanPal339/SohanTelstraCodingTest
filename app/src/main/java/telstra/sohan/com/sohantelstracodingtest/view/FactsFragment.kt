@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.app.Fragment
@@ -16,7 +17,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import telstra.sohan.com.sohantelstracodingtest.R
 import telstra.sohan.com.sohantelstracodingtest.adapter.UserContentFactsAdapter
 import telstra.sohan.com.sohantelstracodingtest.model.FactsDataDto
 import telstra.sohan.com.sohantelstracodingtest.presenter.GetDataCallBack
@@ -26,12 +26,10 @@ class FactsFragment : Fragment(), GetDataCallBack.View, SwipeRefreshLayout.OnRef
 
     private var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val notConnected = intent.getBooleanExtra(ConnectivityManager
-                    .EXTRA_NO_CONNECTIVITY, false)
-            if (notConnected) {
-                disconnected()
-            } else {
+            if (isNetworkAvailable()) {
                 connected()
+            } else {
+                disconnected()
             }
         }
     }
@@ -44,12 +42,19 @@ class FactsFragment : Fragment(), GetDataCallBack.View, SwipeRefreshLayout.OnRef
     private var mPresenter: Presenter? = null
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
 
+    companion object {
+
+        fun newInstance(): FactsFragment {
+            return FactsFragment()
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         //Inflate the layout for this fragment.
-        val view = inflater?.inflate(R.layout.facts_fragment, container, false)
+        val view = inflater.inflate(telstra.sohan.com.sohantelstracodingtest.R.layout.facts_fragment, container, false)
 
-        recyclerView = view.findViewById<RecyclerView>(R.id.recycler) as RecyclerView
+        recyclerView = view.findViewById<RecyclerView>(telstra.sohan.com.sohantelstracodingtest.R.id.recycler) as RecyclerView
         linearLayoutManager = LinearLayoutManager(activity)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = linearLayoutManager
@@ -57,9 +62,9 @@ class FactsFragment : Fragment(), GetDataCallBack.View, SwipeRefreshLayout.OnRef
         mPresenter = Presenter(this)
 
         // SwipeRefreshLayout
-        mSwipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_container) as SwipeRefreshLayout
+        mSwipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(telstra.sohan.com.sohantelstracodingtest.R.id.swipe_container) as SwipeRefreshLayout
         mSwipeRefreshLayout.setOnRefreshListener(this)
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+        mSwipeRefreshLayout.setColorSchemeResources(telstra.sohan.com.sohantelstracodingtest.R.color.colorPrimary,
                 android.R.color.holo_green_dark,
                 android.R.color.holo_orange_dark,
                 android.R.color.holo_blue_dark)
@@ -80,12 +85,12 @@ class FactsFragment : Fragment(), GetDataCallBack.View, SwipeRefreshLayout.OnRef
 
     override fun onStart() {
         super.onStart()
-        context?.registerReceiver(broadcastReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        activity?.registerReceiver(broadcastReceiver, IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
     }
 
     override fun onStop() {
         super.onStop()
-        context?.unregisterReceiver(broadcastReceiver)
+        activity?.unregisterReceiver(broadcastReceiver)
     }
 
     override fun onSaveInstanceState(state: Bundle) {
@@ -122,7 +127,7 @@ class FactsFragment : Fragment(), GetDataCallBack.View, SwipeRefreshLayout.OnRef
         (activity as MainActivity).supportActionBar?.title = title
         // Stopping swipe refresh
         mSwipeRefreshLayout.isRefreshing = false
-        userContentFactsAdapter = context?.let { UserContentFactsAdapter(it, listFactsDataDto) }!!
+        userContentFactsAdapter = activity?.let { UserContentFactsAdapter(it, listFactsDataDto) }!!
         recyclerView.adapter = userContentFactsAdapter
     }
 
@@ -138,11 +143,19 @@ class FactsFragment : Fragment(), GetDataCallBack.View, SwipeRefreshLayout.OnRef
 
     private fun disconnected() {
         recyclerView.visibility = View.INVISIBLE
-        Toast.makeText(activity, getString(R.string.network_error), Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, getString(telstra.sohan.com.sohantelstracodingtest.R.string.network_error), Toast.LENGTH_SHORT).show()
     }
 
     private fun connected() {
         recyclerView.visibility = View.VISIBLE
         loadRecyclerViewData()
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = activity?.getSystemService(Context.CONNECTIVITY_SERVICE)
+        return if (connectivityManager is ConnectivityManager) {
+            val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+            networkInfo?.isConnected ?: false
+        } else false
     }
 }

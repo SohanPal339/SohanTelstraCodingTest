@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="card_view_margin">5dp</dimen>
     <dimen name="relative_padding">10dp</dimen>
-    <dimen name="row_img_height">100dp</dimen>
+    <dimen name="row_img_height">60dp</dimen>
     <dimen name="row_img_width">100dp</dimen>
     <dimen name="row_img_margin_top">5dp</dimen>
     <dimen name="row_img_margin_left">5dp</dimen>
     <dimen name="row_img_margin_right">5dp</dimen>
-    <dimen name="text_view_title_size">22sp</dimen>
-    <dimen name="text_view_description_size">20sp</dimen>
+    <dimen name="text_view_title_size">20sp</dimen>
+    <dimen name="text_view_description_size">16sp</dimen>
     <dimen name="text_view_description_margin_top">5dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
