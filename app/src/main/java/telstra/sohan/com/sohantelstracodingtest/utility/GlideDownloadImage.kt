@@ -20,4 +20,5 @@ object GlideDownloadImage {
                 .into(img)
 
     }
+
 }
